@@ -1,6 +1,6 @@
 {
     "name": "htcw_ml",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Provides classes for reading markup",
     "keywords": ["io","markup","html","xml"],
     "authors": {
