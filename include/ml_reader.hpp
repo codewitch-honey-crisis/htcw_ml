@@ -717,7 +717,6 @@ namespace ml {
                 return (ml_node_type)m_state;
             }
         }
-        constexpr static const size_t capture_size = CaptureSize;
     private:
         int lex_entity() {
             uint32_t buf[lex_type::max_len];
