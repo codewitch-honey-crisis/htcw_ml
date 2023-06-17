@@ -112,7 +112,7 @@ namespace ml {
         int read_content(uint32_t terminator) {
             m_is_empty_elem=0;
             int result = 0;
-            while(m_source.capture_capacity()-m_source.capture_size()>5 && (terminator!=0 || !(ls_type::is_whitespace(m_source.current()))|| m_source.current()=='/' || m_source.current()=='>' ) && terminator!=m_source.current() && m_source.more()) {
+            while(m_source.capture_capacity()-m_source.capture_size()>5 && (terminator!=0 || !(ls_type::is_whitespace(m_source.current()))|| m_source.current()=='/' || m_source.current()=='>' ) && ((int32_t)terminator)!=m_source.current() && m_source.more()) {
                 if(m_source.current()=='&') {
                     if(m_source.capture_capacity()-m_source.capture_size()<(lex_type::max_len*2)+1) {
                         // we'll need to flush to prevent a potential overflow
@@ -780,7 +780,7 @@ namespace ml {
             if(0!=s.buflen) {
                 // MUST HAVE THE FREE BUFFER TO DO THIS!
                 // assert(m_source->capture_capacity()-m_source->capture_size()>=(s->buflen*2)+1);
-                for(int i = 0;i<s.buflen-1;++i) {
+                for(unsigned int i = 0;i<s.buflen-1;++i) {
                     if(!m_source.capture(s.buf[i])) {
                         m_state = (int)ml_node_type::error_overflow;
                     }
