@@ -254,7 +254,7 @@ namespace ml {
                 char buf[10];
                 buf[0]='<';
                 buf[1]='/';
-                strncpy(buf+2,m_last_elem_name,6);
+                memcpy(buf+2,m_last_elem_name,6);
                 buf[8]='>';
                 buf[9]=0;
                 char* pbuf=buf;
