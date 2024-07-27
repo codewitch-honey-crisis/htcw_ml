@@ -668,6 +668,11 @@ namespace ml {
                 case ml_node_type::notation_content:
                 case ml_node_type::notation_end:
                     return false;
+                case ml_node_type::attribute:
+                case ml_node_type::attribute_end:
+                case ml_node_type::attribute_content:
+                case ml_node_type::element:
+                    break;
             }
             while(nt==ml_node_type::element||nt==ml_node_type::attribute||nt==ml_node_type::attribute_content||nt==ml_node_type::attribute_end) {
                 if(!read()) {
