@@ -556,6 +556,17 @@ namespace ml {
             m_denormalize_script_elements = 1;
             *m_last_elem_name = 0;
         }
+        ml_reader_ex() : m_state(0),m_source(nullptr)  {
+            m_denormalize_script_elements = 1;
+            *m_last_elem_name = 0;
+        }
+        void set(io::stream& stream) {
+            if(stream.caps().read==0) {
+                return;
+            }
+            m_source = &stream;
+            *m_last_elem_name = 0;
+        }
         virtual char attribute_quote() const override {
             switch(node_type()) {
                 case ml_node_type::attribute_content:
