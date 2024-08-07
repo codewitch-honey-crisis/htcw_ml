@@ -36,7 +36,7 @@ namespace ml {
 #else
         ml_entity_support::all
 #endif
-    > class raw_ml_reader {
+    > class ml_reader_ex {
         static_assert(CaptureSize>=64,"The capture size must be at least 64.");
         using ls_type = io::lex_source<CaptureSize>;
         using lex_type = helpers::entity_lexer<EntitySupport>;
@@ -542,7 +542,7 @@ namespace ml {
         }
     public:
         constexpr static const size_t capture_size = CaptureSize;
-        raw_ml_reader(io::stream* in) : m_state(0),m_source(in)  {
+        ml_reader_ex(io::stream* in) : m_state(0),m_source(in)  {
             m_denormalize_script_elements = 1;
             *m_last_elem_name = 0;
         }
@@ -796,6 +796,6 @@ namespace ml {
         }
         
     };
-    using ml_reader = raw_ml_reader<1024>;
+    using ml_reader = ml_reader_ex<1024>;
 }
 #endif
