@@ -30,6 +30,7 @@ namespace ml {
         eof              =  16,// End of document
     };
     class ml_reader_base {
+        virtual int depth() const = 0;
         virtual char attribute_quote() const=0;
         virtual bool is_empty_element() const=0;
         virtual bool denormalize_script_elements() const=0;
@@ -57,6 +58,7 @@ namespace ml {
         EntitySupport==ml_entity_support::all;
 #endif
         int m_state;
+        int m_depth;
         ls_type m_source;
         int m_end_quote;
         int m_is_empty_elem;
@@ -555,10 +557,12 @@ namespace ml {
         ml_reader_ex(io::stream* in) : m_state(0),m_source(in)  {
             m_denormalize_script_elements = 1;
             *m_last_elem_name = 0;
+            m_depth  = 0;
         }
         ml_reader_ex() : m_state(0),m_source(nullptr)  {
             m_denormalize_script_elements = 1;
             *m_last_elem_name = 0;
+            m_depth = 0;
         }
         void set(io::stream& stream) {
             if(stream.caps().read==0) {
@@ -566,6 +570,10 @@ namespace ml {
             }
             m_source = &stream;
             *m_last_elem_name = 0;
+            m_depth = 0;
+        }
+        virtual int depth() const override {
+            return m_depth;
         }
         virtual char attribute_quote() const override {
             switch(node_type()) {
@@ -621,6 +629,7 @@ namespace ml {
                         m_state = (int)ml_node_type::attribute_end;
                         return 1;
                     case (int)ml_node_type::element:                        
+                        ++m_depth;
                         return parse_attribute_name_or_content_or_end_element();
                     case (int)ml_node_type::attribute_end:
                     case (int)ml_node_type::attribute:
@@ -636,8 +645,9 @@ namespace ml {
                     
                     case (int)ml_node_type::notation:
                         return parse_notation_content();
-                    case (int)ml_node_type::pi_end:
                     case (int)ml_node_type::element_end:
+                        --m_depth;
+                    case (int)ml_node_type::pi_end:
                     case (int)ml_node_type::notation_end:
                     case (int)ml_node_type::comment_end:
                         if(m_source.current()!='>') {
