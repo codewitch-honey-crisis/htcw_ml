@@ -29,7 +29,17 @@ namespace ml {
         notation_end     =  15, //Notation end '>'
         eof              =  16,// End of document
     };
-    
+    class ml_reader_base {
+        virtual char attribute_quote() const=0;
+        virtual bool is_empty_element() const=0;
+        virtual bool denormalize_script_elements() const=0;
+        virtual void denormalize_script_elements(bool value)=0;
+        virtual bool read()=0;
+        virtual bool skip_to_end_element()=0;
+        virtual bool skip_to_element_children()=0;
+        virtual const char* value() const=0;
+        virtual ml_node_type node_type() const=0;
+    };
     template<size_t CaptureSize=1024,ml_entity_support EntitySupport=
 #ifndef HTCW_ML_HTML_ENTITIES    
         ml_entity_support::xml_only
@@ -546,7 +556,7 @@ namespace ml {
             m_denormalize_script_elements = 1;
             *m_last_elem_name = 0;
         }
-        char attribute_quote() const {
+        virtual char attribute_quote() const override {
             switch(node_type()) {
                 case ml_node_type::attribute_content:
                 case ml_node_type::attribute_end:
@@ -556,16 +566,16 @@ namespace ml {
             }
             return 0;
         }
-        bool is_empty_element() const {
+        virtual bool is_empty_element() const override {
             return 0!=m_is_empty_elem && (node_type()==ml_node_type::element_end);
         }
-        inline bool denormalize_script_elements() const {
+        virtual bool denormalize_script_elements() const override {
             return m_denormalize_script_elements;
         }
-        void denormalize_script_elements(bool value) {
+        virtual void denormalize_script_elements(bool value) override {
             m_denormalize_script_elements = value;
         }
-        bool read() {
+        virtual bool read() override {
             m_source.ensure_started();
             m_source.clear_capture();
             do {
@@ -629,7 +639,7 @@ namespace ml {
             } while(m_state==state_content_unknown) ;
             return false;
         }
-        bool skip_to_end_element() {
+        virtual bool skip_to_end_element() override {
             if(node_type()==ml_node_type::element_end) {
                 return true;
             }
@@ -646,7 +656,7 @@ namespace ml {
             }
             return node_type()==ml_node_type::element_end;
         }
-        bool skip_to_element_children() {
+        virtual bool skip_to_element_children() override {
             ml_node_type nt = node_type();
             switch(nt) {
                 case ml_node_type::element_end:
@@ -685,7 +695,7 @@ namespace ml {
             }
             return true;
         }
-        const char* value() const {
+        virtual const char* value() const override {
             switch(node_type()) {
                 case ml_node_type::element:
                 case ml_node_type::element_end:
@@ -703,7 +713,7 @@ namespace ml {
             }
             return nullptr;
         }
-        ml_node_type node_type() const {
+        virtual ml_node_type node_type() const override {
             switch(m_state) {
             case state_cdata:
             case state_script_content:
