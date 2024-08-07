@@ -46,7 +46,7 @@ namespace ml {
 #else
         ml_entity_support::all
 #endif
-    > class ml_reader_ex {
+    > class ml_reader_ex final : public ml_reader_base {
         static_assert(CaptureSize>=64,"The capture size must be at least 64.");
         using ls_type = io::lex_source<CaptureSize>;
         using lex_type = helpers::entity_lexer<EntitySupport>;
