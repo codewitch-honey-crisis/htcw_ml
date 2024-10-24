@@ -4,6 +4,7 @@
 #include <io_lex_source.hpp>
 // DFA table generated with a variant of Rolex: https://www.codeproject.com/Articles/5257489/Rolex-Unicode-Enabled-Lexer-Generator-in-Csharp
 #include "ml_reader_fa.hpp"
+
 namespace ml {
     enum struct ml_node_type {
         error_eof        = -5, // Unexpected EOF                             
@@ -30,6 +31,7 @@ namespace ml {
         eof              =  16,// End of document
     };
     class ml_reader_base {
+    public:
         virtual int depth() const = 0;
         virtual char attribute_quote() const=0;
         virtual bool is_empty_element() const=0;
@@ -39,6 +41,8 @@ namespace ml {
         virtual bool skip_to_end_element()=0;
         virtual bool skip_to_element_children()=0;
         virtual const char* value() const=0;
+        virtual bool has_value() const=0;
+        virtual bool has_content() const=0;
         virtual ml_node_type node_type() const=0;
     };
     template<size_t CaptureSize=1024,ml_entity_support EntitySupport=
@@ -645,8 +649,11 @@ namespace ml {
                     
                     case (int)ml_node_type::notation:
                         return parse_notation_content();
+                    case (int)ml_node_type::notation_content:
+                        return parse_notation_content();
                     case (int)ml_node_type::element_end:
                         --m_depth;
+                        [[fallthrough]];
                     case (int)ml_node_type::pi_end:
                     case (int)ml_node_type::notation_end:
                     case (int)ml_node_type::comment_end:
@@ -752,6 +759,37 @@ namespace ml {
             default:
                 return (ml_node_type)m_state;
             }
+        }
+        virtual bool has_value() const override {
+            switch(node_type()) {
+                case ml_node_type::element:
+                case ml_node_type::element_end:
+                case ml_node_type::notation:
+                case ml_node_type::attribute:
+                case ml_node_type::pi:
+                case ml_node_type::content:
+                case ml_node_type::notation_content:
+                case ml_node_type::comment_content:
+                case ml_node_type::attribute_content:
+                case ml_node_type::pi_content:
+                    return true;
+                default:
+                    break;
+            }
+            return false;
+        }
+        virtual bool has_content() const override {
+            switch(node_type()) {
+                case ml_node_type::content:
+                case ml_node_type::notation_content:
+                case ml_node_type::comment_content:
+                case ml_node_type::attribute_content:
+                case ml_node_type::pi_content:
+                    return true;
+                default:
+                    break;
+            }
+            return false;
         }
     private:
         int lex_entity() {
