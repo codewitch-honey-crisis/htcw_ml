@@ -15,9 +15,10 @@ FetchContent_Declare(htcw_io
 
 FetchContent_MakeAvailable(htcw_io)
 
-add_library(htcw_ml src/ml_reader_fa.cpp)
+add_library(htcw_ml src/source/ml_reader_fa.cpp)
 target_link_libraries(htcw_ml htcw_io htcw_bits)
 target_include_directories(htcw_ml PUBLIC
-    "${PROJECT_SOURCE_DIR}/include"
+    "${PROJECT_SOURCE_DIR}"
+    "${PROJECT_SOURCE_DIR}/src"
     "${PROJECT_BINARY_DIR}"
 )
