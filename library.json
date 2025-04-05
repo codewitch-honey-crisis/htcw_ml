@@ -1,6 +1,6 @@
 {
     "name": "htcw_ml",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "description": "Provides classes for reading markup",
     "keywords": ["io","markup","html","xml"],
     "authors": {
@@ -20,7 +20,7 @@
         "url": "https://github.com/codewitch-honey-crisis/htcw_ml.git"
     },
     "dependencies": {
-        "codewitch-honey-crisis/htcw_io": "^1.2.3"
+        "codewitch-honey-crisis/htcw_io": "^1.4.0"
     },
     "examples": [
         {
