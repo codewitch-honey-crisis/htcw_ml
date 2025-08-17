@@ -247,7 +247,6 @@ namespace ml {
                         m_source.capture('-');
                         continue;
                     }
-                    m_source.advance();
                     m_state = state_comment_final;
                     return 1;
                 }
