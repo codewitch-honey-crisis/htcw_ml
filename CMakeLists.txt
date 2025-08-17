@@ -22,3 +22,24 @@ target_include_directories(htcw_ml PUBLIC
     "${PROJECT_SOURCE_DIR}/src"
     "${PROJECT_BINARY_DIR}"
 )
+
+# unit tests
+find_package(Catch2 3 QUIET)
+
+if(NOT Catch2_FOUND)
+    include(FetchContent)
+    FetchContent_Declare(
+        Catch2
+        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+        GIT_TAG v3.4.0
+        GIT_SHALLOW ON
+    )
+    FetchContent_MakeAvailable(Catch2)
+endif()
+
+add_executable(ml_tests ml_tests.cpp)
+target_link_libraries(ml_tests htcw_ml htcw_io htcw_bits Catch2::Catch2WithMain)
+
+include(CTest)
+include(Catch)
+catch_discover_tests(ml_tests)
