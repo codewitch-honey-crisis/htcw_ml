@@ -247,7 +247,6 @@ namespace ml {
                         m_source.capture('-');
                         continue;
                     }
-                    m_source.advance();
                     m_state = state_comment_final;
                     return 1;
                 }
@@ -472,6 +471,7 @@ namespace ml {
                                 m_state = (int)ml_node_type::error_eof;
                                 return 1;
                             }
+                            m_source.clear_capture();
                             m_state = state_cdata;
                             return parse_cdata_part();
                         } else if('-'==m_source.current()) {
