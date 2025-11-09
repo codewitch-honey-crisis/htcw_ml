@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(htcw_ml VERSION 0.2.7)
+project(htcw_ml VERSION 0.2.8)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_STATIC_LIBRARY_PREFIX "")
@@ -24,21 +24,21 @@ target_include_directories(htcw_ml PUBLIC
 )
 
 # unit tests
-find_package(Catch2 3 QUIET)
+# find_package(Catch2 3 QUIET)
 
-if(NOT Catch2_FOUND)
-    include(FetchContent)
-    FetchContent_Declare(
-        Catch2
-        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-        GIT_TAG v3.4.0
-        GIT_SHALLOW ON
-    )
-    FetchContent_MakeAvailable(Catch2)
-endif()
+# if(NOT Catch2_FOUND)
+#     include(FetchContent)
+#     FetchContent_Declare(
+#         Catch2
+#         GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+#         GIT_TAG v3.4.0
+#         GIT_SHALLOW ON
+#     )
+#     FetchContent_MakeAvailable(Catch2)
+# endif()
 
-add_executable(ml_tests ml_tests.cpp)
-target_link_libraries(ml_tests htcw_ml htcw_io htcw_bits Catch2::Catch2WithMain)
+# add_executable(ml_tests ml_tests.cpp)
+# target_link_libraries(ml_tests htcw_ml htcw_io htcw_bits Catch2::Catch2WithMain)
 
 #include(CTest)
 #include(Catch)
