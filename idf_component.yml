@@ -1,0 +1,4 @@
+version: "0.2.9"
+dependencies:
+  idf: ">=5.0.0"
+  codewitch-honey-crisis/htcw_io: "^1.4.1"
