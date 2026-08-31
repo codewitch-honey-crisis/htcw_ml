@@ -1,4 +1,4 @@
-version: "0.2.9"
+version: "0.2.10"
 dependencies:
   idf: ">=5.0.0"
-  codewitch-honey-crisis/htcw_io: "^1.4.1"
+  codewitch-honey-crisis/htcw_io: "^1.4.3,<1.5.0"
